@@ -157,6 +157,10 @@ This setting is ignored if *workspace-taskbar.enable* is set to true.
 
 *{icon}*: Icon, as defined in *format-icons*.
 
+*{windows}*: Result from window-rewrite (not available when workspace-taskbar is enabled)
+
+*{window_count}*: Number of windows in the workspace.
+
 # ICONS
 
 Additional to workspace name matching, the following *format-icons* can be set.
@@ -230,6 +234,12 @@ Additional to workspace name matching, the following *format-icons* can be set.
 	"ignore-workspaces": [
 		"(special:)?chrome-sharing-indicator"
 	]
+}
+```
+
+```
+"hyprland/workspaces": {
+	"format": "{name} ({window_count})",  // Shows workspace name with window count, e.g., "1 (3)"
 }
 ```
 

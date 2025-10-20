@@ -282,6 +282,21 @@ void Workspaces::updateWindows(const Json::Value &node, std::string &windows) {
   }
 }
 
+int Workspaces::countWindows(const Json::Value &node) {
+  int count = 0;
+  if ((node["type"].asString() == "con" || node["type"].asString() == "floating_con") &&
+      node["name"].isString()) {
+    count = 1;
+  }
+  for (const Json::Value &child : node["nodes"]) {
+    count += countWindows(child);
+  }
+  for (const Json::Value &child : node["floating_nodes"]) {
+    count += countWindows(child);
+  }
+  return count;
+}
+
 auto Workspaces::update() -> void {
   std::lock_guard<std::mutex> lock(mutex_);
   bool needReorder = filterButtons();
@@ -331,9 +346,11 @@ auto Workspaces::update() -> void {
     }
     std::string output = (*it)["name"].asString();
     std::string windows = "";
+    int windowCount = 0;
     if (config_["window-format"].isString()) {
       updateWindows((*it), windows);
     }
+    windowCount = countWindows((*it));
     if (config_["format"].isString()) {
       auto format = config_["format"].asString();
       output = fmt::format(
@@ -341,7 +358,8 @@ auto Workspaces::update() -> void {
           fmt::arg("name", trimWorkspaceName(output)), fmt::arg("index", (*it)["num"].asString()),
           fmt::arg("windows",
                    windows.substr(0, windows.length() - m_formatWindowSeparator.length())),
-          fmt::arg("output", (*it)["output"].asString()));
+          fmt::arg("output", (*it)["output"].asString()),
+          fmt::arg("window_count", std::to_string(windowCount)));
     }
     if (!config_["disable-markup"].asBool()) {
       static_cast<Gtk::Label *>(button.get_children()[0])->set_markup(output);

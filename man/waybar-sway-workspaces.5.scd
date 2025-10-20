@@ -125,6 +125,8 @@ warp-on-scroll: ++
 
 *{windows}*: Result from window-rewrite
 
+*{window_count}*: Number of windows in the workspace.
+
 # ICONS
 
 Additional to workspace name matching, the following *format-icons* can be set.
@@ -185,6 +187,12 @@ n.b.: the list of outputs can be obtained from command line using *swaymsg -t ge
     "class<kitty>": "k",
 	"title<.* - (.*) - VSCodium>": "codium $1"  // captures part of the window title and formats it into output
   }
+}
+```
+
+```
+"sway/workspaces": {
+  "format": "{name} ({window_count})",  // Shows workspace name with window count, e.g., "1 (3)"
 }
 ```
 

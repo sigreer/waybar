@@ -35,6 +35,7 @@ class Workspaces : public AModule, public sigc::trackable {
   bool filterButtons();
   static bool hasFlag(const Json::Value&, const std::string&);
   void updateWindows(const Json::Value&, std::string&);
+  int countWindows(const Json::Value&);
   Gtk::Button& addButton(const Json::Value&);
   void onButtonReady(const Json::Value&, Gtk::Button&);
   std::string getIcon(const std::string&, const Json::Value&);
