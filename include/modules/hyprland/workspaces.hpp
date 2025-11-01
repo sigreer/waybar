@@ -60,6 +60,7 @@ class Workspaces : public AModule, public EventHandler {
 
   std::string getRewrite(std::string window_class, std::string window_title);
   std::string& getWindowSeparator() { return m_formatWindowSeparator; }
+  std::string getDisplayName(int id, const std::string& hyprlandName);
   bool isWorkspaceIgnored(std::string const& workspace_name);
 
   bool windowRewriteConfigUsesTitle() const { return m_anyWindowRewriteRuleUsesTitle; }
@@ -81,6 +82,7 @@ class Workspaces : public AModule, public EventHandler {
   // Config
   void parseConfig(const Json::Value& config);
   auto populateIconsMap(const Json::Value& formatIcons) -> void;
+  auto populateNamesMap(const Json::Value& formatNames) -> void;
   static auto populateBoolConfig(const Json::Value& config, const std::string& key, bool& member)
       -> void;
   auto populateSortByConfig(const Json::Value& config) -> void;
@@ -165,6 +167,7 @@ class Workspaces : public AModule, public EventHandler {
   std::string m_formatAfter;
 
   std::map<std::string, std::string> m_iconsMap;
+  std::map<std::string, std::string> m_namesMap;
   util::RegexCollection m_windowRewriteRules;
   bool m_anyWindowRewriteRuleUsesTitle = false;
   std::string m_formatWindowSeparator;

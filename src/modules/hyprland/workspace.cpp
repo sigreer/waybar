@@ -258,8 +258,9 @@ void Workspace::update(const std::string &workspace_icon) {
   }
 
   auto formatBefore = m_workspaceManager.formatBefore();
+  std::string displayName = m_workspaceManager.getDisplayName(id(), name());
   m_labelBefore.set_markup(fmt::format(fmt::runtime(formatBefore), fmt::arg("id", id()),
-                                       fmt::arg("name", name()), fmt::arg("icon", workspace_icon),
+                                       fmt::arg("name", displayName), fmt::arg("icon", workspace_icon),
                                        fmt::arg("windows", windows),
                                        fmt::arg("window_count", std::to_string(m_windows))));
   m_labelBefore.get_style_context()->add_class("workspace-label");
@@ -351,8 +352,9 @@ void Workspace::updateTaskbar(const std::string &workspace_icon) {
 
   auto formatAfter = m_workspaceManager.formatAfter();
   if (!formatAfter.empty()) {
+    std::string displayName = m_workspaceManager.getDisplayName(id(), name());
     m_labelAfter.set_markup(fmt::format(fmt::runtime(formatAfter), fmt::arg("id", id()),
-                                        fmt::arg("name", name()),
+                                        fmt::arg("name", displayName),
                                         fmt::arg("icon", workspace_icon),
                                         fmt::arg("window_count", std::to_string(m_windows))));
     m_content.pack_end(m_labelAfter, false, false);

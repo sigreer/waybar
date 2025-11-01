@@ -160,6 +160,20 @@ std::string Workspaces::getRewrite(std::string window_class, std::string window_
                      fmt::arg("title", window_title));
 }
 
+std::string Workspaces::getDisplayName(int id, const std::string& hyprlandName) {
+  // If workspace name from Hyprland is just the ID (as string), check for static mapping
+  std::string idStr = std::to_string(id);
+  if (hyprlandName == idStr && !m_namesMap.empty()) {
+    // Try to find by ID first
+    auto it = m_namesMap.find(idStr);
+    if (it != m_namesMap.end()) {
+      return it->second;
+    }
+  }
+  // Otherwise use the name from Hyprland
+  return hyprlandName;
+}
+
 std::vector<int> Workspaces::getVisibleWorkspaces() {
   std::vector<int> visibleWorkspaces;
   auto monitors = IPC::inst().getSocket1JsonReply("monitors");
@@ -625,6 +639,10 @@ auto Workspaces::parseConfig(const Json::Value &config) -> void {
     populateIconsMap(config["format-icons"]);
   }
 
+  if (config["format-names"].isObject()) {
+    populateNamesMap(config["format-names"]);
+  }
+
   populateBoolConfig(config, "all-outputs", m_allOutputs);
   populateBoolConfig(config, "show-special", m_showSpecial);
   populateBoolConfig(config, "special-visible-only", m_specialVisibleOnly);
@@ -653,6 +671,12 @@ auto Workspaces::populateIconsMap(const Json::Value &formatIcons) -> void {
     m_iconsMap.emplace(name, formatIcons[name].asString());
   }
   m_iconsMap.emplace("", "");
+}
+
+auto Workspaces::populateNamesMap(const Json::Value &formatNames) -> void {
+  for (const auto &key : formatNames.getMemberNames()) {
+    m_namesMap.emplace(key, formatNames[key].asString());
+  }
 }
 
 auto Workspaces::populateBoolConfig(const Json::Value &config, const std::string &key, bool &member)
