@@ -128,8 +128,8 @@ void Workspaces::doUpdate() {
 
   removeWorkspacesToRemove();
   createWorkspacesToCreate();
-  updateWorkspaceStates();
   updateWindowCount();
+  updateWorkspaceStates();
   sortWorkspaces();
 
   bool anyWindowCreated = updateWindowsToCreate();
