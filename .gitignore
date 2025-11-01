@@ -50,3 +50,8 @@ result
 result-*
 
 .ccls-cache
+
+# Personal build environment files
+CLAUDE.md
+rebuild.sh
+subprojects/.wraplock
