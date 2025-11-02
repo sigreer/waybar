@@ -1038,8 +1038,8 @@ void Workspaces::updateWindowCount() {
   const Json::Value workspacesJson = m_ipc.getSocket1JsonReply("workspaces");
   for (auto const &workspace : m_workspaces) {
     auto workspaceJson = std::ranges::find_if(workspacesJson, [&](Json::Value const &x) {
-      return x["name"].asString() == workspace->name() ||
-             (workspace->isSpecial() && x["name"].asString() == "special:" + workspace->name());
+      // Match by ID instead of name to handle format-names mapping correctly
+      return x["id"].asInt() == workspace->id();
     });
     uint32_t count = 0;
     if (workspaceJson != workspacesJson.end()) {
